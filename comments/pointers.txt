@@ -1,0 +1,195 @@
+Ponteiros -> São variáveis que armazenam endereços de memória.
+
+Cada variável em um programa é armazenada em um endereço de memória específico, portanto, pode ser acessada diretamente do seu endereço de memória.
+
+Um ponteiro armazena o endereço de memória de outra variável, permitindo que o programa acesse ou modifique o conteúdo dessa variável indiretamente, ou seja, ser um sar o nome da 
+variável diretamente.
+
+Os ponteiros são usados para alocar memória dinamicamente, passar argumentos para funções por referência, criar estruturas de dados complexas, manipular cadeias de caracteres
+e para acessar recursos de hardware diretamente.
+
+_______________________________________________________________________________________________________________________________________________________________________________________
+
+VANTAGENS
+
+- Eficiência de memória: Em algumas situações, como na alocação dinâmica de memória, o uso de ponteiros pode ser mais eficiente do que a alocação estática de memória, permitindo que
+o programa acesse apenas a quantidade necessária de memória.
+
+- Flexibilidade: O uso de ponteiros permite que os programas criem estruturas de dados complexas e dinâmicas, permitindo uma maior flexibilidade na programação.
+
+- Passagem por referência: Os ponteiros permitem que as funções recebam argumentos por referência, o que significa que a função pode modificar o valor do argumento original.
+Isso é particularmente útil quando se trabalha com abundância de dados, pois evita a necessidade de copiar grandes blocos de dados entre as funções.
+
+- Acesso a recursos de hardware: O uso de ponteiros permite que os programas acessem diretamente os recursos de hardware, como a memória ou os registradores do processador,
+permitindo uma maior otimização de código e desempenho.
+
+DESVANTAGENS
+
+- Segurança: Os ponteiros podem ser usados para acessar diretamente a memória do sistema, o que pode ser um risco de segurança. Se um programa permitir que um ponteiro acesse
+áreas de memória que não são esperadas, pode ocorrer corrupção de memória ou violação de segurança.
+
+- Acesso não autorizado: O uso incorreto de ponteiros pode levar a tentativas de acesso não autorizado aos recursos de hardware, incluindo a memória do sistema, o que pode causar
+problemas de segurança ou falhas do sistema.
+
+- Gerenciamento de memória: O uso de ponteiros exige que o programador gerencie a alocação e desalocação de memória manualmente, o que pode ser propenso a erros. Se um programa não
+desalocar a memória corretamente, pode levar a vazamentos de memória, resultando em consumo excessivo de recursos do sistema.
+
+- Complexidade: O uso de ponteiros pode tornar o código mais complexo e difícil de entender, especialmente para programadores menos experientes. Isso pode levar a erros de programação
+e dificuldades para manter e atualizar o código.
+
+_______________________________________________________________________________________________________________________________________________________________________________________
+
+COMO DECLARAR UM PONTEIRO?
+
+Sintaxe -> var nomePonteiro *tipo
+
+Por exemplo, para declarar um ponteiro que aponta para valores do tipo inteiro, faremos da seguinte forma: var ponteiroInteiro *int
+
+package main
+
+import (
+	"fmt"
+	"reflect"
+)
+
+func main() {
+	var ptr *int
+	fmt.Println(ptr)
+	fmt.Println(reflect.TypeOf(ptr))
+}
+
+
+Primeiro temos a declaração do pacote e a importação do módulo fmt. Dentro da função main, temos a delcaração de um ponteiro chamado ptr que aponta para valores do tipo inteiro
+com a instrução var ptr *int e logo em seguida, realiza a exibição do valor e o tipo da variável ptr.
+
+A exibição do valor de ptr resultou na saída nil, o que significa que o ponteiro não aponta para lugar nenhum, ou seja, temos o ponteiro declarado, mas que não aponta para nenhuma
+posição de memória. Esse é o zero value de um ponteiro. Na segunda impressão temos o resultado *int, que demonstra que a nossa variável ptr de fato é um ponteiro de inteiros.
+
+_______________________________________________________________________________________________________________________________________________________________________________________
+
+COMO APONTAR PARA UMA POSIÇÃO DE MEMÓRIA?
+
+Em golang, para podermos saber a posição de memória de uma variável utilizamos o operador &. 
+
+package main
+
+import "fmt"
+
+func main() {
+	var a int = 10
+	var ptr *int = &a
+
+	fmt.Printf("Endereço de a: %p\n", &a)
+	fmt.Printf("Endereço de ptr: %p\n", ptr)
+}
+
+Ambas as variáveis apontam para o mesmo endereço de memória.
+
+_______________________________________________________________________________________________________________________________________________________________________________________
+
+
+ACESSANDO O VALOR APONTADO POR PONTEIROS DE GOLANG 
+
+Também é possível acessarmos o valor por um ponteiro utilizando o operador * antes do nome do ponteiro. Por exemplo: 
+
+package main
+
+import "fmt"
+
+func main() {
+	var a int = 10
+	var ptr *int = &a
+
+	fmt.Printf("Endereço de a: %p\n", &a)
+	fmt.Printf("Valor de a: %d\n", a)
+	fmt.Printf("Endereço de ptr: %p\n", ptr)
+	fmt.Printf("Valor de ptr: %d\n", *ptr)
+}
+
+Veja que ao utilizarmos a sintaxe *ptr conseguimos obter o valor 10 que é o mesmo valor armazenado na posição de memória apontada pelo ponteiro ptr. Essa operação de colocar o 
+operador * antes do nome do ponteiro é chamada de "desreferência de ponteiro", ou seja, quando fizemos *ptr nós desreferênciamos o ponteiro ptr para acessar o valor que estava
+armazenado na posição de memória apontada pelo ponteiro ptr.
+
+_______________________________________________________________________________________________________________________________________________________________________________________
+
+ALTERANDO O VALOR DE UMA POSIÇÃO DE MEMÓRIA
+
+Agora que sabemos que podemos acessar o valor de uma posição de memória através da operação de desreferência, nós podemos alterar o valor armazenado nessa posição de memória.
+
+package main
+
+import "fmt"
+
+func main() {
+	var a int = 10
+	var ptr *int = &a
+
+	fmt.Printf("Endereço de a: %p\n", &a)
+	fmt.Printf("Valor de a: %d\n", a)
+	fmt.Printf("Endereço de ptr: %p\n", ptr)
+	fmt.Printf("Valor de ptr: %d\n", *ptr)
+
+	*ptr = 20
+
+	fmt.Printf("Novo valor de a: %d\n", a)
+	fmt.Printf("Novo valor de ptr: %d\n", *ptr)
+}
+
+Ao utilizar a sintaxe *ptr = 20, nós alteramos o valor armazenado na posição de memória apontada pelo ponteiro ptr para o valor 20. Com isso, a variável a também foi atualizada
+para o valor 20. É importante lembrar que ao utilizar ponteiros para alterar valores de variáveis, devemos ter cuidado para não acessar áreas de memória não autorizadas e causar
+problemas de segurança ou falhas do sistema.
+
+_______________________________________________________________________________________________________________________________________________________________________________________
+
+PASSAGEM POR VALOR E POR REFERÊNCIA
+
+Na linguagem Go, por padrão, todas as variáveis são passadas por valor para as funções, ou seja, a função recebe uma cópia do valor da variável. Porém, é possível passar um ponteiro
+para a função, permitindo que a função acesse e modifique o valor original da variável. Isso pode ser útil quando se trabalha com abundância de dados e se deseja evitar a cópia
+desnecessária de dados entre as funções. É importante lembrar que o uso de ponteiros para passagem de argumentos pode tornar o código mais complexo e difícil de entender,
+especialmente para programadores menos experientes.
+
+package main
+
+import "fmt"
+
+func mudaValor(a int) {
+	a = 20
+}
+
+func main() {
+	var a int = 10
+
+	fmt.Printf("Valor de a: %d\n", a)
+	mudaValor(a)
+	fmt.Printf("Valor de a: %d\n", a)
+}
+
+Saída: 
+
+Valor de a: 10
+Valor de a: 10
+
+Mesmo após a chamada da função mudaValor, o valor da variável a continuou o mesmo. Isso acontece pois a função mudaValor recebe uma cópia do valor contido na variável a e não a
+posição de memória da variável a. Por isso, ao realizarmos a =20 o valor da variável a continuou o mesmo. Para conseguir de fato alterar o valor da variável teremos que mudar o código
+para que a função mudaValor receba um ponteiro como parâmetro. Dessa forma, faremos com que a função trabalhe com passagem por referência e não com passagem por valor.
+
+package main
+
+import "fmt"
+
+func mudaValor(a *int) {
+	*a = 20
+}
+
+func main() {
+	var a int = 10
+
+	fmt.Printf("Valor de a: %d\n", a)
+	mudaValor(&a)
+	fmt.Printf("Valor de a: %d\n", a)
+}
+
+Saída:
+
+Valor de a: 10
+Valor de a: 20
