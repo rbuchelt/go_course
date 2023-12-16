@@ -2,14 +2,16 @@ package main
 
 import "fmt"
 
-func mudaValor(a *int) {
-	*a = 20
+// Função que adiciona um valor a uma variável usando um ponteiro
+func addValue(num *int, value int) {
+	*num += value
 }
 
 func main() {
-	var a int = 10
+	number := 10
+	fmt.Println("Número antes da função:", number)
 
-	fmt.Printf("Valor de a: %d\n", a)
-	mudaValor(&a)
-	fmt.Printf("Valor de a: %d\n", a)
+	// Passando o endereço da variável para a função usando &
+	addValue(&number, 5)
+	fmt.Println("Número após a função:", number)
 }

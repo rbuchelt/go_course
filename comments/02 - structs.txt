@@ -1,0 +1,81 @@
+type User struct {
+	FirstName   string
+	LastName    string
+	PhoneNumber string
+	Age         int
+	BirthDate   time.Time
+}
+
+_____________________________________________________________________________________________________________________________________________________________________________________
+
+EXPORTAÇÃO DE STRUCT E DOS CAMPOS DE STRUCT
+
+O uso de letras maiúsculas ou minúsculas para os nomes dos campos afeta a acessibilidade dos seus nomes de campos pelos códigos em execução em outros pacotes.
+
+Os campos de um struct seguem as mesmas regras de exportação que outros identificadores dentro da linguagem. Se um nome de campo iniciar com uma letra maiúscula,
+ele será legível e gravável pelo código fora do pacote onde o struct foi definido. Se o campo iniciar com uma letra minúscula, apenas o código dentro do pacote do
+struct poderá ser e gravar naquele campo.
+
+Exemplo:
+************************
+package main
+
+import "fmt"
+
+type Creature struct {
+    Name string
+    Type string
+
+    password string
+}
+
+func main() {
+    c := Creature {
+        Name: "Sammy",
+        Type: "Shark",
+
+        password: "secret",
+    }
+
+    fmt.Println(c.Name, "the", c.Type)
+    fmt.Println("Password is", c.password)
+}
+***********************
+
+Password é um campo de string não exportado, o que significa que qualquer outro pacote que tentar instanciar uma Creature não podera acessar ou definir seu campo secret. 
+Dentro do mesmo pacote, podemos acessar esses campos, como esse exemplo fez. Como o main também está no pacote main, ele pode referir o c.password e recuperar o valor armazenado
+lá. É comum ter campos não exportados em structs com acesso a eles e mediados por métodos exportados.
+
+_____________________________________________________________________________________________________________________________________________________________________________________
+
+STRUCTS EM LINHA
+
+Além de definir um novo tipo para representar uma struct, também podemos definir um struct em linha. Essas definições de struct dinâmicas são úteis em situações onde a criação
+de novos nomes para tipos de structs seriam um esforço perdido. Por exemplo, com frequência os testes usam um struct para definir todos os parâmetros que compõem um caso de teste
+em particular.
+
+As definições de struct em linha aparecem à direita de uma atribuição de variável. Devemos fornecer uma instanciação deles imediatamente após, fornecendo um par de chaves adicional
+com os valores de cada um dos campos que definirmos.
+
+************************
+Exemplo:
+
+package main
+
+import "fmt"
+
+func main() {
+    c := struct {
+        Name string,
+        Type string,
+    }{
+        Name: "Sammy",
+        Type: "Shark,
+    }
+    fmt.Println(c.Name, "the", c.Type)
+}
+
+Em vez de definir um novo tipo descrevendo nosso struct com a palavra-chave type, esse exemplo define um struct em linha colocando a definição do struct imediatamente após o operador
+de atribuição curto, :=. Definimos os campos do struct como nos exemplos anteriores, mas devemos fornecer imediatamente outro par de chaves e os valores que cada campo irá assumir.
+Agora, o uso dessa struct ficou exatamente como era antes - podemo-nos referir aos nomes de campo usando a notação de ponto. O lugar mais comum para se encontrar structs em linha 
+são durante testes, já que os structs únicos são definidos para conter dados e expectativas de um caso de teste em particular.
