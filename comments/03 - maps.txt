@@ -1,0 +1,45 @@
+Sintaxe de criação de um map:
+
+myMap := make(map[string]string)
+
+func main() {
+	myMap := make(map[string]int)
+
+	myMap["First"] = 1
+	myMap["Second"] = 2
+
+	log.Println(myMap["First"], myMap["Second"])
+
+}
+
+package main
+
+import "log"
+
+type User struct {
+	FirstName string
+	LastName  string
+	Age       int
+}
+
+func main() {
+	myMap := make(map[string]User)
+
+	me := User{
+		FirstName: "Renan",
+		LastName:  "Buchelt de Oliveira",
+		Age:       36,
+	}
+
+	myMap["me"] = me
+
+	log.Println(myMap["me"].FirstName)
+	log.Println(myMap["me"].Age)
+}
+
+Os maps se comportam como um banco de dados; em vez de chamar um número inteiro para obter um valor de índice específico - como faríamos com um slice, também podemos atribuir um valor
+a uma chave e chamar a chave para obter seu valor relacionado.
+
+
+
+
