@@ -2,55 +2,32 @@ package main
 
 import "fmt"
 
-type Animal interface {
-	Says() string
-	NumberOfLegs() int
-}
-
-type Dog struct {
-	Name  string
-	Breed string
-}
-
-type Gorilla struct {
-	Name          string
-	Color         string
-	NumberOfTeeth int
-}
-
 func main() {
-	dog := Dog{
-		Name:  "Pretinho",
-		Breed: "Vira Lata",
+	// Comunicação Síncrona
+	canalSincrono := make(chan string)
+
+	// Goroutine enviando dados para o canal
+	go func() {
+		canalSincrono <- "Mensagem Síncrona"
+	}()
+
+	// Recebendo dados (bloqueia até receber)
+	mensagem := <-canalSincrono
+	fmt.Println(mensagem) // Saída: Mensagem Síncrona
+
+	// Comunicação Assíncrona
+	canalAssincrono := make(chan string)
+
+	// Goroutine enviando dados para o canal
+	go func() {
+		canalAssincrono <- "Mensagem Assíncrona"
+	}()
+
+	// Recebendo dados (não bloqueia)
+	select {
+	case mensagem := <-canalAssincrono:
+		fmt.Println(mensagem) // Saída: Mensagem Assíncrona
+	default:
+		fmt.Println("Nenhuma mensagem disponível")
 	}
-
-	PrintInfo(&dog)
-
-	gorilla := Gorilla{
-		Name:          "Jock",
-		Color:         "Grey",
-		NumberOfTeeth: 38,
-	}
-
-	PrintInfo(&gorilla)
-}
-
-func PrintInfo(a Animal) {
-	fmt.Println("this Animal says", a.Says(), "and has", a.NumberOfLegs(), "legs")
-}
-
-func (d *Dog) Says() string {
-	return "Woof"
-}
-
-func (d *Dog) NumberOfLegs() int {
-	return 4
-}
-
-func (d *Gorilla) Says() string {
-	return "Ugh"
-}
-
-func (d *Gorilla) NumberOfLegs() int {
-	return 2
 }

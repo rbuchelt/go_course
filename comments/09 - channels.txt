@@ -1,0 +1,137 @@
+package main
+
+import (
+	"log"
+
+	"github.com/renan/curso/helpers"
+)
+
+const numPool = 61
+
+func CalculateValue(intChan chan int) {
+	randomNumber := helpers.RandomNumber(numPool)
+	intChan <- randomNumber
+}
+
+func main() {
+	intChan := make(chan int)
+	defer close(intChan)
+
+	go CalculateValue(intChan)
+
+	num := <-intChan
+
+	log.Println(num)
+}
+
+_______________________________________________________________________________________________________________________________________________________________________________________
+
+
+Podemos pensar em channels como sendo uma espécie de túnel de comunicação entre goroutines, onde uma goroutine consegue enviar informações para outra antes mesmo de terminar sua execução.
+Nesse mesmo cenário, a goroutine que recebe a informação, ficaria pausada até as informações chegarem.
+
+Quando vamos declarar um channel ou inicializá-lo, precisamos associar um tipo de dado a ele. Esse tipo de dado é o tipo que ele estará apto à transportar enrte goroutines.
+
+Ao declarar um channel, seu valor incial será nil. Para iniciá-lo, devemos usar a função make do Go.
+
+package main
+
+import (
+	"fmt"
+)
+
+func main() {
+	var c chan int
+	fmt.Println(c)
+
+	c = make(chan int)
+	fmt.Println(c)
+}
+
+Saída:
+
+renan@renan:~/go/src/github.com/course$ go run main.go
+<nil>
+0xc00002c0c0
+
+Normalmente os channels são declarados e incializados ao mesmo tempo:
+
+c := make(chan int)
+
+Para escrever ou ler informações de um channel utilizamos o sinal <- que serve como uma seta indicadora. Se ela estiver apontando para o channel estamos escrevendo, do contrário,
+estamos lendo.
+
+Por padrão, sempre que já uma escrita ou leitura em um channel, ambas goroutines ficam bloqueadas. No caso, quando uma goroutine escreve algo em um channel, ela fica bloqueada até que
+a outra goroutine leia. Já para goroutines que fazem leitura de um channel, essas ficam bloqueadas até que outra goroutine escreva algo no channel.
+
+Caso uma goroutine escreva em um channel mas nenhuma outra faça a leitura, ou uma goroutine faça a leitura mas nenhuma outra escreva, o programa irá parar com um erro de DEADLOCK.
+
+package main
+
+import "fmt"
+
+func hello(done chan bool) {
+	fmt.Println("Nova goroutine")
+	done <- true
+}
+
+func main() {
+	done := make(chan bool)
+	go hello(done)
+	<-done
+	fmt.Println("Goroutine principal")
+}
+
+
+package main
+
+import "fmt"
+
+func main() {
+	// Cria um canal de strings
+	canal := make(chan string)
+
+	// Envia um valor para o canal (em uma goroutine)
+	go func() {
+		canal <- "Olá, Canal!"
+	}()
+
+	// Recebe o valor do canal
+	mensagem := <-canal
+	fmt.Println(mensagem) // Saída: Olá, Canal!
+}
+
+
+package main
+
+import "fmt"
+
+func main() {
+	// Comunicação Síncrona
+	canalSincrono := make(chan string)
+
+	// Goroutine enviando dados para o canal
+	go func() {
+		canalSincrono <- "Mensagem Síncrona"
+	}()
+
+	// Recebendo dados (bloqueia até receber)
+	mensagem := <-canalSincrono
+	fmt.Println(mensagem) // Saída: Mensagem Síncrona
+
+	// Comunicação Assíncrona
+	canalAssincrono := make(chan string)
+
+	// Goroutine enviando dados para o canal
+	go func() {
+		canalAssincrono <- "Mensagem Assíncrona"
+	}()
+
+	// Recebendo dados (não bloqueia)
+	select {
+	case mensagem := <-canalAssincrono:
+		fmt.Println(mensagem) // Saída: Mensagem Assíncrona
+	default:
+		fmt.Println("Nenhuma mensagem disponível")
+	}
+}

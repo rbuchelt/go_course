@@ -1,0 +1,75 @@
+CONCORRÊNCIA X PARALELISMO
+
+Concorrência é basicamente a capacidade de lidar com várias coisas de uma só vez, enquanto paralelismo é a capacidade de ligar com várias coisas ao mesmo tempo.
+
+Ou seja, em concorrência, duas tarefas são executadas em sequência utilizando somente um core, enquanto em paralelismo as duas atividades são executadas ao mesmo tempo, usando dois cores.
+
+_______________________________________________________________________________________________________________________________________________________________________________________
+
+
+GOROUTINES
+
+Goroutines são funções ou métodos executados em concorrência. 
+
+Um ponto positivo é que o runtime do Go consegue aumentar ou diminuir a quantidade de Goroutines de acordo com a necessidade da aplicação, enquanto o número de thread normalmente
+é fixo.
+
+É comum uma única thread conter milhares de goroutines sendo executadas. Caso alguma dessa goroutine bloqueie a execução das outras por estar aguardando algum tipo de input do usuário
+por exemplo, o runtime do Go irá criar uma nova thread e mover as outras goroutines para essa thread.
+
+Goroutines rodam no mesmo espaço de memória, o que facilita para compartilhar objetos em memória, mas também devemos tomar cuidado para manter sincronizado. Os channels ajudam nesse 
+processo de comunicação entre goroutines, além de evitar race condition.
+
+Sempre que queremos iniciar uma nova goroutine, tudo o que precisa ser feito é adicionar a palavra go antes da chamada da função / método.
+
+go foo(a, b, c)
+
+foo, a, b e c são interpretadas na goroutine em que a chamada ocorreu, porém a sua execução acontecerá em uma nova goroutine.
+
+Basicamente tudo em Go funciona com goroutines, inclusive a execução principal do programa. Por isso, qualquer chamada de uma nova goroutine acontece dentro de uma goroutine.
+
+Exemplo básico:
+
+package main
+
+import "log"
+
+func hello() {
+	log.Println("Nova goroutine...")
+}
+
+func main() {
+	go hello()
+	log.Println("Goroutine principal")
+}
+
+
+package main
+
+import (
+	"fmt"
+	"time"
+)
+
+func numeros() {
+	for i := 0; i <= 10; i++ {
+		fmt.Printf("%d ", i)
+		time.Sleep(time.Millisecond * 200)
+	}
+}
+
+func numeros2() {
+	for i := 20; i <= 30; i++ {
+		fmt.Printf("%d ", i)
+		time.Sleep(time.Millisecond * 300)
+	}
+}
+
+func main() {
+	go numeros2()
+	go numeros()
+
+	time.Sleep(5 * time.Second)
+	fmt.Println("Fim da Execução")
+}
+
