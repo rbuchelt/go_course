@@ -2,22 +2,20 @@ package main
 
 import "log"
 
-type User struct {
-	FirstName string
-	LastName  string
-	Age       int
-}
-
 func main() {
-	me := User{
-		FirstName: "Renan",
-		LastName:  "Buchelt de Oliveira",
-		Age:       36,
+	myVar := "dog"
+
+	switch myVar {
+	case "cat":
+		log.Println("Cat is set to cat")
+
+	case "dog":
+		log.Println("Cat is set to dog")
+
+	case "fish":
+		log.Println("Cat is set to fish")
+
+	default:
+		log.Println("None of them!")
 	}
-
-	myMap := make(map[string]User)
-
-	myMap["me"] = me
-
-	log.Println(myMap["me"].Age)
 }
