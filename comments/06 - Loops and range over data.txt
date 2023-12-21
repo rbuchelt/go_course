@@ -1,0 +1,71 @@
+package main
+
+import "log"
+
+func main() {
+	for i := 0; i <= 10; i++ {
+		log.Println(i)
+	}
+}
+
+
+package main
+
+import "log"
+
+func main() {
+	animals := []string{"dog", "fish", "horse", "cow", "cat"}
+
+	for _, animal := range animals {
+		log.Println(animal)
+	}
+}
+
+
+package main
+
+import "log"
+
+func main() {
+	animals := make(map[string]string)
+
+	animals["Dog"] = "Johnny"
+	animals["Cat"] = "Pretinho"
+
+	for animalType, animal := range animals {
+		log.Println(animalType, animal)
+	}
+}
+
+package main
+
+import "log"
+
+func main() {
+	firstLine := "Vai Corinthians!!"
+
+	for i, l := range firstLine {
+		log.Println(i, ":", l)
+	}
+}
+
+package main
+
+import "log"
+
+func main() {
+	type User struct {
+		FirstName string
+		LastName  string
+		Email     string
+		Age       int
+	}
+	var users []User
+	users = append(users, User{"Renan", "Buchelt", "renan.oliveira@ituran.com.br", 36})
+	users = append(users, User{"Priscilla", "Mendonça", "pri@ituran.com.br", 34})
+
+	for _, l := range users {
+		log.Println(l.FirstName, l.LastName, l.Email, l.Age)
+	}
+}
+

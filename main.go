@@ -3,19 +3,17 @@ package main
 import "log"
 
 func main() {
-	myVar := "dog"
+	type User struct {
+		FirstName string
+		LastName  string
+		Email     string
+		Age       int
+	}
+	var users []User
+	users = append(users, User{"Renan", "Buchelt", "renan.oliveira@ituran.com.br", 36})
+	users = append(users, User{"Priscilla", "Mendonça", "pri@ituran.com.br", 34})
 
-	switch myVar {
-	case "cat":
-		log.Println("Cat is set to cat")
-
-	case "dog":
-		log.Println("Cat is set to dog")
-
-	case "fish":
-		log.Println("Cat is set to fish")
-
-	default:
-		log.Println("None of them!")
+	for _, l := range users {
+		log.Println(l.FirstName, l.LastName, l.Email, l.Age)
 	}
 }
