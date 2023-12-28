@@ -1,33 +1,31 @@
 package main
 
-import "fmt"
+import (
+	"errors"
+	"log"
+)
 
 func main() {
-	// Comunicação Síncrona
-	canalSincrono := make(chan string)
 
-	// Goroutine enviando dados para o canal
-	go func() {
-		canalSincrono <- "Mensagem Síncrona"
-	}()
+	result, err := divide(100, 7)
 
-	// Recebendo dados (bloqueia até receber)
-	mensagem := <-canalSincrono
-	fmt.Println(mensagem) // Saída: Mensagem Síncrona
-
-	// Comunicação Assíncrona
-	canalAssincrono := make(chan string)
-
-	// Goroutine enviando dados para o canal
-	go func() {
-		canalAssincrono <- "Mensagem Assíncrona"
-	}()
-
-	// Recebendo dados (não bloqueia)
-	select {
-	case mensagem := <-canalAssincrono:
-		fmt.Println(mensagem) // Saída: Mensagem Assíncrona
-	default:
-		fmt.Println("Nenhuma mensagem disponível")
+	if err != nil {
+		log.Println(err)
+		return
 	}
+
+	log.Println("result of division is: ", result)
+
+}
+
+func divide(x, y float32) (float32, error) {
+	var result float32
+
+	if y == 0 {
+		return result, errors.New("cannot divide by zero")
+	}
+
+	result = x / y
+
+	return result, nil
 }
